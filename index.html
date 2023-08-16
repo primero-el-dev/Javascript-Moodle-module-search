@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Javascript string search</title>
+
+	<style type="text/css">
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+		
+		.block {
+			display: block;
+			margin-bottom: .5rem;
+			width: 20rem;
+		}
+	</style>
+</head>
+<body>
+	<label>
+		Full text
+		<textarea name="fullText" id="fullText" class="block" rows="8"></textarea>
+	</label>
+	<label>
+		Keywords
+		<input type="text" name="keywords" id="keywords" class="block">
+	</label>
+	<button id="searchButton" class="block">Search</button>
+
+	<div id="result" class="block">
+		
+	</div>
+
+	<script>
+		const fullTextInput = document.getElementById('fullText');
+		const keywordsInput = document.getElementById('keywords');
+		const searchButton = document.getElementById('searchButton');
+		const resultDiv = document.getElementById('result');
+
+
+		function removeDuplicates(arr) {
+		 	return arr.filter((v, i, self) => i == self.indexOf(v)); // If item was before, remove
+		}
+
+		searchButton.addEventListener('click', function (e) {
+			let fullText = fullTextInput.value;
+			let keywords = keywordsInput.value.match(/mod_[\w\d]*/g);
+			keywords = removeDuplicates(keywords);
+			let found = {};
+			for (let keyword of keywords) {
+				// Under the assumption that we expect spaces or string edge before and after keyword
+				found[keyword] = fullText.match(new RegExp('(?:\\s|^)'+keyword+'(?:\\s|$)')) != null;
+			}
+
+			let result = [];
+			for (let i in found) {
+				result.push(i + ', ' + (found[i] ? 'FOUND' : 'NOT FOUND'));
+			}
+
+			resultDiv.innerText = result.join(', ');
+		});
+	</script>
+</body>
+</html>

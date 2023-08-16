@@ -1,0 +1,1 @@
+# Javascript Moodle module search
